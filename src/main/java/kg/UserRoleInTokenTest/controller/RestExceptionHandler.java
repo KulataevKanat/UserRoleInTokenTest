@@ -1,6 +1,6 @@
 package kg.UserRoleInTokenTest.controller;
 
-import kg.UserRoleInTokenTest.model.PremiseNotFoundException;
+import kg.UserRoleInTokenTest.security.PremiseNotFoundException;
 import kg.UserRoleInTokenTest.security.InvalidJwtAuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package kg.UserRoleInTokenTest.model;
+package kg.UserRoleInTokenTest.security;
 
 public class PremiseNotFoundException extends RuntimeException {
     public PremiseNotFoundException() {

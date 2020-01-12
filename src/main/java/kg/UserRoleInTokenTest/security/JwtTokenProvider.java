@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
     @Autowired
-    JwtProperties jwtProperties;
+    private JwtProperties jwtProperties;
 
     @Autowired
     private UserDetailsService userDetailsService;
