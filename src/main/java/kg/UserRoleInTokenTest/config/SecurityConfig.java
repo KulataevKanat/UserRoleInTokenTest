@@ -74,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));
-        ;
 
     }
 
