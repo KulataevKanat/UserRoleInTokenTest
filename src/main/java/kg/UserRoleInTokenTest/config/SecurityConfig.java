@@ -1,7 +1,6 @@
 package kg.UserRoleInTokenTest.config;
 
-import kg.UserRoleInTokenTest.security.JwtSecurityConfigurer;
-import kg.UserRoleInTokenTest.security.JwtTokenProvider;
+import kg.UserRoleInTokenTest.security.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     private static final String[] AUTH_WHITELIST = {
             "/v2/api-docs",
@@ -50,6 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
+                .exceptionHandling()
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+
+                .and()
+
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
@@ -73,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .apply(new JwtSecurityConfigurer(jwtTokenProvider));
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
     }
 
