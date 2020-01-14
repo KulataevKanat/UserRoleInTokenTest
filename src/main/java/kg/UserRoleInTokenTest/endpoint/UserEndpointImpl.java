@@ -39,6 +39,14 @@ public class UserEndpointImpl implements UserEndpoint {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+            /**
+             * WORK WITH ODM
+             */
+            /*String token = jwtTokenProvider.createToken(username, userService.findByUsername(username).get(0).getRoles());*/
+
+            /**
+             * WORK WITH ORM
+             */
             String token = jwtTokenProvider.createToken(username, userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
