@@ -8,6 +8,13 @@ import java.util.List;
 public class UserDto {
     private Long id;
     private String username;
+    private String password;
+
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+    }
 
     public static List<UserDto> toList(List<User> list) {
         List<UserDto> result = new LinkedList<>();
@@ -33,10 +40,11 @@ public class UserDto {
         this.username = username;
     }
 
-    public UserDto(User user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
+    public String getPassword() {
+        return password;
+    }
 
-
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

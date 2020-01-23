@@ -1,14 +1,13 @@
 package kg.UserRoleInTokenTest.service;
 
 import kg.UserRoleInTokenTest.entity.User;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    User addUser(User user);
-
     User findById(Long id);
 
     List<User> findAll();

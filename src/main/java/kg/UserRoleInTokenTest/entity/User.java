@@ -71,9 +71,11 @@ public class User implements UserDetails {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
+
 
     public void setPassword(String password) {
         this.password = password;

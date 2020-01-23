@@ -1,6 +1,8 @@
 package kg.UserRoleInTokenTest.config;
 
 import kg.UserRoleInTokenTest.security.JwtAuthenticationEntryPoint;
+import kg.UserRoleInTokenTest.security.JwtSecurityConfigurer;
+import kg.UserRoleInTokenTest.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     private static final String[] AUTH_WHITELIST = {
             "/v2/api-docs",
@@ -66,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //User
                 .antMatchers("/api/user/{id}").hasRole("USER")
-                .antMatchers("/api/user").hasRole("USER")
+                .antMatchers("/api/user").permitAll()
 
                 //Security
                 .antMatchers("/api/security/sign-in").permitAll()
@@ -78,13 +83,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .apply(new JwtSecurityConfigurer(jwtTokenProvider));
 
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
 }

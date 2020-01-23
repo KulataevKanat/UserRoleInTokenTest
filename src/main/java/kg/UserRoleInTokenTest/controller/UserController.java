@@ -2,6 +2,7 @@ package kg.UserRoleInTokenTest.controller;
 
 import kg.UserRoleInTokenTest.dto.user.UserDto;
 import kg.UserRoleInTokenTest.endpoint.UserEndpoint;
+import kg.UserRoleInTokenTest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
