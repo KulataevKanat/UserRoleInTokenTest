@@ -6,6 +6,8 @@ import kg.UserRoleInTokenTest.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -64,17 +65,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                //Premise
-                .antMatchers("/api/premise").hasRole("ADMIN")
-                .antMatchers("/api/premise/{id}").hasRole("ADMIN")
-                .antMatchers("/api/premise").hasRole("ADMIN")
-
-                //User
-                .antMatchers("/api/user/{id}").hasRole("USER")
-                .antMatchers("/api/user").permitAll()
 
                 //Security
-                .antMatchers("/api/security/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/security/sign-in").permitAll()
+
+                //Premise
+                .antMatchers(HttpMethod.POST,"/api/premise").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/premise/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/premise").hasAuthority("ROLE_ADMIN")
+
+                //User
+                .antMatchers(HttpMethod.GET,"/api/user/{id}").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET,"/api/user").permitAll()
 
                 //Swagger
                 .antMatchers(AUTH_WHITELIST).permitAll()

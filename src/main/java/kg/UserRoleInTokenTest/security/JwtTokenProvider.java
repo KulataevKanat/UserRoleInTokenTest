@@ -2,7 +2,6 @@ package kg.UserRoleInTokenTest.security;
 
 import io.jsonwebtoken.*;
 import kg.UserRoleInTokenTest.config.JwtProperties;
-import kg.UserRoleInTokenTest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +21,6 @@ public class JwtTokenProvider {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private UserService userService;
-
     private String secretKey;
 
     @PostConstruct
@@ -33,9 +29,9 @@ public class JwtTokenProvider {
     }
 
     public String createToken(String username, List<String> roles) {
+
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", roles);
-
         Date now = new Date();
         Date validity = new Date(now.getTime() + jwtProperties.getValidityInMs());
 
@@ -53,7 +49,13 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts
+                .parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject()
+                ;
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -66,7 +68,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts
+                    .parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token);
 
             if (claims.getBody().getExpiration().before(new Date())) {
                 return false;
