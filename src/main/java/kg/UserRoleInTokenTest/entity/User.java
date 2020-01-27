@@ -24,7 +24,12 @@ public class User implements UserDetails {
     @Column(name = "user_password", columnDefinition = "varchar")
     private String password;
 
+
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            indexes = @Index(columnList = "user_id"))
+    @Column(name = "roles", nullable = false)
     private List<String> roles = new ArrayList<>();
 
     public User() {
